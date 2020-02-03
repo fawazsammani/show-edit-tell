@@ -51,6 +51,7 @@ Next, run:
 ```bash
 python preprocess_caps.py
 ```
+This will create all the files to the folder `caption data`. 
 
 
 ### Evaluation
