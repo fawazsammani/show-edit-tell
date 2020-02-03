@@ -1,7 +1,7 @@
 ## Show, Edit and Tell: A Framework for Editing Image Captions
 This contains the source code for *Show, Edit and Tell: A Framework for Editing Image Captions*
 
-![Image](demo.png){ width="800" height="600" style="display: block; margin: 0 auto" }
+<img align="left" width="600" height="200" src="demo.png">
 
 ### Requirements
 - Python 3.6 or 3.7
