@@ -2,7 +2,7 @@
 This contains the source code for *Show, Edit and Tell: A Framework for Editing Image Captions*
 
 <p align="center">
-  <img width="600" height="900" src="demo.png">
+  <img width="600" height="600" src="demo.png">
 </p>
 
 ### Requirements
