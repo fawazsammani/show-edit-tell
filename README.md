@@ -32,7 +32,7 @@ python bottom-up_features/tsv.py
 
 This command will create the following files:
 <ul>
-<li>An HDF5 file containing the bottom up image features for train and val splits, 36 per image for each split, in an I, 36, 2048 tensor where I is the number of images in the split.</li>
+<li>An HDF5 file containing the bottom up image features for train and val splits, 36 per image for each split, in an `I, 36, 2048` tensor where I is the number of images in the split.</li>
 <li>PKL files that contain training and validation image IDs mapping to index in HDF5 dataset created above.</li>
 </ul>
 
