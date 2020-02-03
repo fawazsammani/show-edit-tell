@@ -1,6 +1,10 @@
 ## Show, Edit and Tell: A Framework for Editing Image Captions
 This contains the source code for *Show, Edit and Tell: A Framework for Editing Image Captions*
-![demo](https://user-images.githubusercontent.com/57742791/73628485-62c99d00-468b-11ea-9624-93aacb1aea6d.png)
+
+<p align="center">
+ ![demo](https://user-images.githubusercontent.com/57742791/73628485-62c99d00-468b-11ea-9624-93aacb1aea6d.png)
+</p>
+
 
 ### Requirements
 - Python 3.6 or 3.7
