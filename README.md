@@ -14,6 +14,9 @@ For evaluation, you also need:
 - [coco-api](https://github.com/cocodataset/cocoapi)
 - [cococaption python 3](https://github.com/mtanti/coco-caption)
 
+### Pretrained Models
+You can download the pretrained models from [here](https://drive.google.com/drive/folders/1qyI8LD8p3qSVFC2hpVYULR8Rjr7hPBL-)
+
 ### Evaluation
 All the generated captions and scores from our model can be found in the `outputs` folder. 
 
