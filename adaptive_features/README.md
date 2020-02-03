@@ -17,4 +17,4 @@ Then:
 python adaptive/make_bu_data.py --output_dir data/cocobu
 ```
 
-This will create `data/cocobu_fc`, `data/cocobu_att` and `data/cocobu_box`. If you want to use bottom-up feature, you can just follow the following steps and replace all cocotalk with cocobu.
+This will create `data/cocobu_fc`, `data/cocobu_att` and `data/cocobu_box`. 
