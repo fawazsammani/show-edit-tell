@@ -36,7 +36,7 @@ This command will create the following files:
 <li>PKL files that contain training and validation image IDs mapping to index in HDF5 dataset created above.</li>
 </ul>
 
-### Download Caption Data
+### Download/Prepare Caption Data
 You can either download all the related caption data files from [here](https://drive.google.com/drive/folders/1JQx0M8fIUSdnXL-9i6-z3VF2bMBMP1LQ) or create them yourself.The folder contains the following:
 -  `WORDMAP_coco`: maps the words to indices 
 - `CAPUTIL`: stores the information about the existing captions in a dictionary organized as follows: `{"COCO_image_name": {"caption": "existing caption to be edited", "encoded_previous_caption": an encoded list of the words, "previous_caption_length": a list contaning the length of the caption, "image_ids": the COCO image id}`
