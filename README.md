@@ -17,8 +17,8 @@ For evaluation, you also need:
 ### Evaluation
 All the generated captions and scores from our model can be found in the `outputs` folder. 
 
-|                   | BLEU-1  | BLEU-4  |  CIDEr  |
-|-------------------|:-------:|:-------:|:-------:|
-|Cross-Entropy Loss |  77.9   |  38.0   |  1.200  |
-|CIDEr Optimization |  80.6   |  39.2   |  1.289  |
+|                   | BLEU-1  | BLEU-4  |  CIDEr  | SPICE   |
+|-------------------|:-------:|:-------:|:-------:|:-------:|
+|Cross-Entropy Loss |  77.9   |  38.0   |  1.200  |  21.2   |
+|CIDEr Optimization |  80.6   |  39.2   |  1.289  |  22.6   |
 
