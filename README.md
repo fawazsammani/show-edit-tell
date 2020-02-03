@@ -53,7 +53,7 @@ python preprocess_caps.py
 ```
 This will dump all the files to the folder `caption data`. 
 
-Next, download the existing captios to be edited, and organize them in a list containing dictionaries with each dictionary in the following format: {"image_id": COCO_image_id, "caption": "caption to be edited", "file_name": "split\\COCO_image_name"}. For example: {"image_id": 522418, "caption": "a woman cutting a cake with a knife", "file_name": "val2014\\COCO_val2014_000000522418.jpg"}, {"image_id": 318219, "caption": "a young boy wearing headphones sitting at a desk with a computer keyboard", "file_name": "val2014\\COCO_val2014_000000318219.jpg"}. In our work, we use the captions produced by [AoANet](https://github.com/husthuaan/AoANet).
+Next, download the existing captios to be edited, and organize them in a list containing dictionaries with each dictionary in the following format: `{"image_id": COCO_image_id, "caption": "caption to be edited", "file_name": "split\\COCO_image_name"}`. For example: `{"image_id": 522418, "caption": "a woman cutting a cake with a knife", "file_name": "val2014\\COCO_val2014_000000522418.jpg"}`. In our work, we use the captions produced by [AoANet](https://github.com/husthuaan/AoANet).
 
 Next, run: 
 ```bash
