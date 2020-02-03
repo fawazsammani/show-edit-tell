@@ -37,14 +37,19 @@ This command will create the following files:
 </ul>
 
 ### Download Caption Data
-You can either download all the related caption data files from [here](https://drive.google.com/drive/folders/1JQx0M8fIUSdnXL-9i6-z3VF2bMBMP1LQ) or create them yourself. If you'd like to create them yourself, please follow the instructions in `caption data` folder.
-The folder contains the following:
+You can either download all the related caption data files from [here](https://drive.google.com/drive/folders/1JQx0M8fIUSdnXL-9i6-z3VF2bMBMP1LQ) or create them yourself.The folder contains the following:
 -  `WORDMAP_coco`: maps the words to indices 
 - `CAPUTIL`: stores the information about the existing captions in a dictionary organized as follows: `{"COCO_image_name": {"caption": "existing caption to be edited", "encoded_previous_caption": an encoded list of the words, "previous_caption_length": a list contaning the length of the caption, "image_ids": the COCO image id}`
 - `CAPTIONS` the encoded ground-truth captions (a list with `number_images x 5` lists. Example: we have 113,287 training images in Karpathy Split, thereofre there is 566,435 lists for the training split)
 - `CAPLENS`: the length of the ground-truth captions (a list with `number_images x 5` vallues)
 - `NAMES`: the COCO image name in the same order as the CAPTIONS
 - `GENOME_DETS`: the splits and image ids for loading the images in accordance to the features file created above
+
+If you'd like to create the caption data yourself, download [Karpathy's Split](http://cs.stanford.edu/people/karpathy/deepimagesent/caption_datasets.zip) training, validation, and test splits. This zip file contains the captions. Place the file in `caption data` folder. You should also have the `pkl` files created from the 'Download Features' section: `train36_imgid2idx.pkl` and `val36_imgid2idx.pkl`.
+
+Next, run: ```bash
+python preprocess_caps.py
+```
 
 
 ### Evaluation
