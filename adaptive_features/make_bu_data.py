@@ -1,3 +1,7 @@
+"""
+Code adopted from: https://github.com/ruotianluo/self-critical.pytorch/blob/master/scripts/make_bu_data.py
+"""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
