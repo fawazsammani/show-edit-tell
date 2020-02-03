@@ -2,6 +2,6 @@
 This contains the source code for *Show, Edit and Tell: A Framework for Editing Image Captions*
 
 ### Requirements
-- Pthon 3.6 or 3.7
+- Python 3.6 or 3.7
 - PyTorch 1.0 or higher 
 
