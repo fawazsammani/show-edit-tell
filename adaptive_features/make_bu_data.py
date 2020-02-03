@@ -34,6 +34,7 @@ infiles = ['trainval/karpathy_test_resnet101_faster_rcnn_genome.tsv',
            'trainval/karpathy_train_resnet101_faster_rcnn_genome.tsv.1']
 
 os.makedirs(args.output_dir+'_att')
+os.makedirs(args.output_dir+'_fc')
 
 for infile in infiles:
     print('Reading ' + infile)
