@@ -14,6 +14,8 @@ For evaluation, you also need:
 - [coco-api](https://github.com/cocodataset/cocoapi)
 - [cococaption python 3](https://github.com/mtanti/coco-caption)
 
+Argument Parser is currently not supported. We will add support to it soon. 
+
 ### Pretrained Models
 You can download the pretrained models from [here](https://drive.google.com/drive/folders/1qyI8LD8p3qSVFC2hpVYULR8Rjr7hPBL-)
 
