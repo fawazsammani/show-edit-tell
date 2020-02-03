@@ -1,4 +1,5 @@
 """
+Code adopted from: https://github.com/hengyuan-hu/bottom-up-attention-vqa
 Reads in a tsv file with pre-trained bottom up attention features and
 stores it in HDF5 format.  Also store {image_id: feature_idx}
  as a pickle file.
