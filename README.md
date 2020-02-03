@@ -47,7 +47,8 @@ You can either download all the related caption data files from [here](https://d
 
 If you'd like to create the caption data yourself, download [Karpathy's Split](http://cs.stanford.edu/people/karpathy/deepimagesent/caption_datasets.zip) training, validation, and test splits. This zip file contains the captions. Place the file in `caption data` folder. You should also have the `pkl` files created from the 'Download Features' section: `train36_imgid2idx.pkl` and `val36_imgid2idx.pkl`.
 
-Next, run: ```bash
+Next, run: 
+```bash
 python preprocess_caps.py
 ```
 
