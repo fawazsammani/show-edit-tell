@@ -17,4 +17,4 @@ Then:
 python make_bu_data.py --output_dir data/cocobu
 ```
 
-This will create `data/cocobu_fc`, `data/cocobu_att` and `data/cocobu_box`. 
+This will create `data/cocobu_fc` and `data/cocobu_att`
