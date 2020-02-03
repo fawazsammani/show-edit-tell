@@ -36,6 +36,9 @@ This command will create the following files:
 <li>PKL files that contain training and validation image IDs mapping to index in HDF5 dataset created above.</li>
 </ul>
 
+### Download Caption Data
+You can either download all the related caption data files from [here](https://drive.google.com/drive/folders/1JQx0M8fIUSdnXL-9i6-z3VF2bMBMP1LQ) or create them yourself. If you'd like to create them yourself, please follow the instructions in `caption data` folder.
+
 ### Evaluation
 All the generated captions and scores from our model can be found in the `outputs` folder. 
 
