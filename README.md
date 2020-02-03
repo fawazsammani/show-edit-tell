@@ -25,7 +25,7 @@ In this work, we use 36 fixed [bottom-up features](https://github.com/peteanders
 
 First, download the fixed features from [here](https://imagecaption.blob.core.windows.net/imagecaption/trainval_36.zip) and unzip the file. Place the unzipped folder in `bottom-up_features` folder.  
 
-Next type this command in a python 2 environment: 
+Next type this command: 
 ```bash
 python bottom-up_features/tsv.py
 ```
