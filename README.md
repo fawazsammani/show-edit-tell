@@ -71,6 +71,32 @@ python preprocess_rl.py
 ```
 This will dump two files in the `data` folder used for computing metric scores.
 
+### Training
+#### XE training stage: 
+For training DCNet, run:
+
+```bash
+python dcnet.py
+```
+For optimizing DCNet with MSE, run:
+```bash
+python dcnet_with_mse.py
+```
+For training editnet:
+```bash
+python editnet.py
+```
+
+#### Cider-D Optimization stage:
+For training DCNet, run:
+```bash
+python dcnet_rl.py
+```
+For training editnet:
+```bash
+python editnet_rl.py
+```
+
 ### Evaluation
 Refer to `eval` folder for instructions. All the generated captions and scores from our model can be found in the `outputs` folder. 
 
