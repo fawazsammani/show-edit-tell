@@ -21,5 +21,5 @@ This will create `data/cocobu_fc` and `data/cocobu_att`
 
 Than run:
 ```bash
-python preprocess_rl.py
+python editnet_adaptive.py
 ```
