@@ -79,6 +79,34 @@ def collate_fn_train(data):
         
     return images, images_mean, captions, caplens, previous_captions, prev_caplens, all_captions
 
+class COCOValDataset(Dataset):
+
+    def __init__(self):
+
+        self.cpi = 5
+        
+        with open('caption data/VAL_names_coco.json', 'r') as j:
+            self.names = json.load(j)
+            
+        with open('caption data/CAPUTIL_val.json', 'r') as j:
+            self.caption_util = json.load(j)
+
+        # Total number of datapoints
+        self.dataset_size = len(self.names)
+
+    def __getitem__(self, i):
+
+        img_name = self.names[i]
+        image_id = torch.LongTensor([self.caption_util[img_name]['image_ids']])
+
+        previous_caption = torch.LongTensor(self.caption_util[img_name]['encoded_previous_caption'])
+        prev_caplen = torch.LongTensor(self.caption_util[img_name]['previous_caption_length'])
+        
+        return image_id, previous_caption, prev_caplen
+
+    def __len__(self):
+        return self.dataset_size
+
 
 class COCOTestDataset(Dataset):
 
@@ -107,9 +135,11 @@ class COCOTestDataset(Dataset):
 
     def __len__(self):
         return self.dataset_size
-
-
+ 
 def collate_fn_test(data):
+    """
+    Same for validation and testing
+    """
     image_id, previous_caption, prev_caplen = zip(*data)
     batch_size = 1
     previous_captions = torch.stack(previous_caption, 0)
@@ -722,7 +752,7 @@ epochs_since_improvement = 0
 batch_size = 80
 best_cider = 0.
 print_freq = 100  
-checkpoint = 'BEST_checkpoint_15.pth.tar'
+checkpoint = None
 annFile = 'cococaption/annotations/captions_val2014.json' 
 learning_rate_decay_start = 0    
 learning_rate_decay_every = 3
@@ -766,6 +796,12 @@ train_loader = torch.utils.data.DataLoader(COCOTrainDataset(),
                                            shuffle=True, 
                                            collate_fn = collate_fn_train,
                                            pin_memory=True)
+
+val_loader = torch.utils.data.DataLoader(COCOValDataset(),
+                                         batch_size = 1, 
+                                         shuffle=True, 
+                                         collate_fn = collate_fn_test,
+                                         pin_memory=True)
 
 test_loader = torch.utils.data.DataLoader(COCOTestDataset(),
                                           batch_size = 1, 
