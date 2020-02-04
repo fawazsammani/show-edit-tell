@@ -832,7 +832,7 @@ epochs_since_improvement = 0
 batch_size = 80
 best_cider = 0.
 print_freq = 100  
-checkpoint = None
+checkpoint = 'editnet.tar'   # load xe checkpoint
 annFile = 'cococaption/annotations/captions_val2014.json' 
 cached_tokens =  'coco-train-idxs'
 
