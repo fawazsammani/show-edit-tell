@@ -383,16 +383,17 @@ class CaptionAttentionC(nn.Module):
         return gated_context , alpha_c
 
 class SelectC(nn.Module):
-    
+    """
+    SCMA Mechanism
+    """
     def __init__(self, prev_caption_dim, decoder_dim):
         super(SelectC, self).__init__()
-#        self.transform_copied = nn.Linear(prev_caption_dim, decoder_dim)
-#        self.tanh = nn.Tanh()
         
     def forward(self, previous_encoded_m, sim_weights, soft = False):
         """
         previous_encoded_c of shape (batch_size, max_words, 1024)
         sim_weights os shape (batch_size, max_words)
+        soft: use soft attention of non-differentiable indexing?
         """
         if not soft:
             sim_weights_c = sim_weights.detach()
@@ -406,7 +407,6 @@ class SelectC(nn.Module):
             sim_weights = (sim_weights * mask) + mask_diff      # (batch_size, max_words)
             
         selected_memory = (sim_weights.unsqueeze(2) * previous_encoded_m).sum(dim = 1)
-#        selected_memory = self.tanh(self.transform_copied(selected_memory))
         return selected_memory
 
     
