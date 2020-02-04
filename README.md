@@ -71,7 +71,7 @@ python preprocess_rl.py
 ```
 This will dump two files in the `data` folder used for computing metric scores.
 
-### Training
+### Training and Validation
 ##### XE training stage: 
 For training DCNet, run:
 
