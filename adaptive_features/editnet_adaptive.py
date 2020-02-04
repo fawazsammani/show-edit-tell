@@ -813,7 +813,7 @@ test_loader = torch.utils.data.DataLoader(COCOTestDataset(),
 for epoch in range(start_epoch, epochs):
 
     if epochs_since_improvement == 3:
-        print("Model Fucked up......Bye")
+        print("No Improvement for 3 epochs....Early Stopping Triggered")
         break
         
     if epoch > learning_rate_decay_start and learning_rate_decay_start >= 0:
