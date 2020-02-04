@@ -11,7 +11,7 @@ unzip trainval.zip
 
 ```
 
-Then:
+Then run:
 
 ```bash
 python make_bu_data.py --output_dir data/cocobu
@@ -19,7 +19,7 @@ python make_bu_data.py --output_dir data/cocobu
 
 This will create `data/cocobu_fc` and `data/cocobu_att`
 
-Than run:
+Then run:
 ```bash
 python editnet_adaptive.py
 ```
