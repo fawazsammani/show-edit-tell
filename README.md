@@ -72,7 +72,7 @@ python preprocess_rl.py
 This will dump two files in the `data` folder used for computing metric scores.
 
 ### Evaluation
-All the generated captions and scores from our model can be found in the `outputs` folder. 
+Refer to `eval` folder for instructions. All the generated captions and scores from our model can be found in the `outputs` folder. 
 
 |                   | BLEU-1  | BLEU-4  |  CIDEr  | SPICE   |
 |-------------------|:-------:|:-------:|:-------:|:-------:|
