@@ -344,11 +344,13 @@ class DAE(nn.Module):
 
         return predictions, encoded_captions, decode_lengths, sort_ind, gd_final_hidden, decoder_last_hidden
 
-class DAEWithMSE(nn.Module):
-    
+class DAEWithAR(nn.Module):
+
     def __init__(self):
-        super(DAEWithMSE, self).__init__()
-        
+        """
+        Implements DAE with MSE Optimiztion
+        """
+        super(DAEWithAR, self).__init__()
         model = torch.load('BEST_checkpoint_3_dae.pth.tar')
         self.dae = model['dae']
         decoder_dim = self.dae.decoder_dim
@@ -360,9 +362,9 @@ class DAEWithMSE(nn.Module):
         
         return scores, caps_sorted, decode_lengths, sort_ind, gd_final_hidden, decoder_last_hidden
      
-def train(train_loader, dae_mse, criterion, mse_criterion, dae_mse_optimizer, epoch):
+def train(train_loader, dae_ar, criterion, mse_criterion, dae_ar_optimizer, epoch):
 
-    dae_mse.train()  # train mode (dropout and batchnorm is used)
+    dae_ar.train()  # train mode (dropout and batchnorm is used)
 
     losses = AverageMeter()  # loss (per word decoded)
     top3accs = AverageMeter()  # top5 accuracy
@@ -376,7 +378,7 @@ def train(train_loader, dae_mse, criterion, mse_criterion, dae_mse_optimizer, ep
         prev_caplen = prev_caplen.to(device)
 
         # Forward prop.
-        scores, caps_sorted, decode_lengths, sort_ind, gd_final_hidden, decoder_last_hidden = dae_mse(caps, caplens, 
+        scores, caps_sorted, decode_lengths, sort_ind, gd_final_hidden, decoder_last_hidden = dae_ar(caps, caplens, 
                                                                                                      previous_caption, 
                                                                                                      prev_caplen)
                                                   
@@ -395,14 +397,14 @@ def train(train_loader, dae_mse, criterion, mse_criterion, dae_mse_optimizer, ep
         loss += mse_loss
         
         # Back prop.
-        dae_mse_optimizer.zero_grad()
+        dae_ar_optimizer.zero_grad()
         loss.backward()
 
         # Clip gradients when they are getting too large
-        torch.nn.utils.clip_grad_norm_(filter(lambda p: p.requires_grad, dae_mse.parameters()), 0.25)
+        torch.nn.utils.clip_grad_norm_(filter(lambda p: p.requires_grad, dae_ar.parameters()), 0.25)
 
         # Update weights
-        dae_mse_optimizer.step()
+        dae_ar_optimizer.step()
 
         # Keep track of metrics
         top3 = accuracy(scores.data, targets.data, 3)
@@ -417,10 +419,10 @@ def train(train_loader, dae_mse, criterion, mse_criterion, dae_mse_optimizer, ep
                                                                           loss=losses, top3=top3accs))
 
 
-def evaluate(loader, dae_mse, beam_size, epoch, word_map):
+def evaluate(loader, dae_ar, beam_size, epoch, word_map):
     
     vocab_size = len(word_map)
-    dae_mse.eval()
+    dae_ar.eval()
     results = []
     rev_word_map = {v: k for k, v in word_map.items()}
     
@@ -435,7 +437,7 @@ def evaluate(loader, dae_mse, beam_size, epoch, word_map):
         prev_caplen = prev_caplen.to(device) 
         image_id = image_id.to(device)  # (1,1)
         
-        previous_encoded, final_hidden, prev_caption_mask = dae_mse.dae.caption_encoder(encoded_previous_captions, prev_caplen)
+        previous_encoded, final_hidden, prev_caption_mask = dae_ar.dae.caption_encoder(encoded_previous_captions, prev_caplen)
         
         # Expand all
         previous_encoded = previous_encoded.expand(k, -1, -1)
@@ -457,19 +459,19 @@ def evaluate(loader, dae_mse, beam_size, epoch, word_map):
 
         # Start decoding
         step = 1
-        h1, c1 = dae_mse.dae.init_hidden_state(k)  # (batch_size, decoder_dim)
-        h2, c2 = dae_mse.dae.init_hidden_state(k)
+        h1, c1 = dae_ar.dae.init_hidden_state(k)  # (batch_size, decoder_dim)
+        h2, c2 = dae_ar.dae.init_hidden_state(k)
 
         # s is a number less than or equal to k, because sequences are removed from this process once they hit <end>
         while True:
 
-            embeddings = dae_mse.dae.embed(k_prev_words).squeeze(1)        
+            embeddings = dae_ar.dae.embed(k_prev_words).squeeze(1)        
             topdown_input = torch.cat([embeddings, final_hidden, h2],dim=1)
-            h1,c1 = dae_mse.dae.attention_lstm(topdown_input, (h1, c1))
-            attend_cap = dae_mse.dae.caption_attention(previous_encoded, h1, prev_cap_mask)
+            h1,c1 = dae_ar.dae.attention_lstm(topdown_input, (h1, c1))
+            attend_cap = dae_ar.dae.caption_attention(previous_encoded, h1, prev_cap_mask)
             language_input = torch.cat([h1, attend_cap], dim = 1)
-            h2,c2 = dae_mse.dae.language_lstm(language_input, (h2, c2))
-            scores = dae_mse.dae.fc(h2)  
+            h2,c2 = dae_ar.dae.language_lstm(language_input, (h2, c2))
+            scores = dae_ar.dae.fc(h2)  
             scores = F.log_softmax(scores, dim=1)
 
             # Add
@@ -559,7 +561,7 @@ def evaluate(loader, dae_mse, beam_size, epoch, word_map):
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 cudnn.benchmark = True  # set to true only if inputs to model are fixed size; otherwise lot of computational overhead
 dae_lr = 5e-4 
-dae_mse_lr = 1e-4 
+dae_ar_lr = 1e-4 
 start_epoch = 0
 epochs = 10  # number of epochs to train for (if early stopping is not triggered)
 epochs_since_improvement = 0  # keeps track of number of epochs since there's been an improvement in validation BLEU
@@ -578,18 +580,18 @@ rev_word_map = {v: k for k, v in word_map.items()}
     
 # Initialize / load checkpoint
 if checkpoint is None:
-    dae_mse = DAEWithMSE()
-    dae_mse_optimizer = torch.optim.Adam(params=dae_mse.parameters(),lr=dae_mse_lr)
+    dae_ar = DAEWithAR()
+    dae_ar_optimizer = torch.optim.Adam(params=dae_ar.parameters(),lr=dae_ar_lr)
 
 else:
     checkpoint = torch.load(checkpoint)
     start_epoch = checkpoint['epoch'] + 1
     epochs_since_improvement = checkpoint['epochs_since_improvement']
     best_cider = checkpoint['cider']
-    dae_mse = checkpoint['dae_mse']
-    dae_mse_optimizer = checkpoint['dae_mse_optimizer']
+    dae_ar = checkpoint['dae_ar']
+    dae_ar_optimizer = checkpoint['dae_ar_optimizer']
 
-dae_mse = dae_mse.to(device)
+dae_ar = dae_ar.to(device)
 
 # Loss functions
 criterion = nn.CrossEntropyLoss().to(device)
@@ -618,15 +620,15 @@ for epoch in range(start_epoch, epochs):
         
     # One epoch's training
     train(train_loader=train_loader,
-          dae_mse=dae_mse,
+          dae_ar=dae_ar,
           criterion = criterion, 
           mse_criterion = mse_criterion,
-          dae_mse_optimizer=dae_mse_optimizer,
+          dae_ar_optimizer=dae_ar_optimizer,
           epoch=epoch)
 
     # One epoch's validation
     recent_cider, recent_bleu4 = evaluate(loader = val_loader, 
-                                          dae_mse = dae_mse, 
+                                          dae_ar = dae_ar, 
                                           beam_size = 3, 
                                           epoch = epoch, 
                                           word_map = word_map)
@@ -641,5 +643,6 @@ for epoch in range(start_epoch, epochs):
         epochs_since_improvement = 0
 
     # Save checkpoint
-    save_checkpoint(epoch, epochs_since_improvement, dae_mse, dae_mse_optimizer, recent_cider, is_best)
+    save_checkpoint(epoch, epochs_since_improvement, dae_ar, dae_ar_optimizer, recent_cider, is_best)
+
 
