@@ -72,7 +72,7 @@ python preprocess_rl.py
 This will dump two files in the `data` folder used for computing metric scores.
 
 ### Training
-#### XE training stage: 
+##### XE training stage: 
 For training DCNet, run:
 
 ```bash
@@ -87,7 +87,7 @@ For training editnet:
 python editnet.py
 ```
 
-#### Cider-D Optimization stage:
+##### Cider-D Optimization stage:
 For training DCNet, run:
 ```bash
 python dcnet_rl.py
