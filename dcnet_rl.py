@@ -347,11 +347,12 @@ class DAE(nn.Module):
                 
         return seq, seqLogprobs
     
-
-class DAEWithMSE(nn.Module):
-    
+class DAEWithAR(nn.Module):
+    """
+    DAE with MSE Optimization
+    """
     def __init__(self):
-        super(DAEWithMSE, self).__init__()
+        super(DAEWithAR, self).__init__()
         
         model = torch.load('BEST_checkpoint_3_dae.pth.tar')
         self.dae = model['dae']
@@ -457,9 +458,9 @@ def get_self_critical_reward(gen_result, greedy_res, ground_truth, cider_weight 
     return rewards
 
      
-def train(train_loader, dae_mse, criterion, dae_mse_optimizer, epoch, word_map):
+def train(train_loader, dae_ar, criterion, dae_ar_optimizer, epoch, word_map):
 
-    dae_mse.train()  # train mode (dropout and batchnorm is used)
+    dae_ar.train()  # train mode (dropout and batchnorm is used)
 
     sum_rewards = 0
     count = 0
@@ -472,19 +473,19 @@ def train(train_loader, dae_mse, criterion, dae_mse_optimizer, epoch, word_map):
         prev_caplen = prev_caplen.to(device)
 
         
-        dae_mse_optimizer.zero_grad()
-        dae_mse.eval()
+        dae_ar_optimizer.zero_grad()
+        dae_ar.eval()
         with torch.no_grad():
-            greedy_res, _ = dae_mse(word_map, previous_caption, prev_caplen, sample_max = True, sample_rl = False)
-        dae_mse.train()
-        seq_gen, seqLogprobs = dae_mse(word_map, previous_caption, prev_caplen, sample_max = False, sample_rl = True)
+            greedy_res, _ = dae_ar(word_map, previous_caption, prev_caplen, sample_max = True, sample_rl = False)
+        dae_ar.train()
+        seq_gen, seqLogprobs = dae_ar(word_map, previous_caption, prev_caplen, sample_max = False, sample_rl = True)
         ground_truth = preprocess_gd(allcaps, word_map)
         rewards = get_self_critical_reward(seq_gen, greedy_res, ground_truth, cider_weight = 1)
         loss = criterion(seqLogprobs, seq_gen, rewards.to(device))
         
         loss.backward()
-        torch.nn.utils.clip_grad_norm_(filter(lambda p: p.requires_grad, dae_mse.parameters()), 0.25)
-        dae_mse_optimizer.step()
+        torch.nn.utils.clip_grad_norm_(filter(lambda p: p.requires_grad, dae_ar.parameters()), 0.25)
+        dae_ar_optimizer.step()
         
         sum_rewards += torch.mean(rewards[:,0]) * samples
         count += samples
@@ -494,10 +495,10 @@ def train(train_loader, dae_mse, criterion, dae_mse_optimizer, epoch, word_map):
             print('Epoch: [{}][{}/{}]\tAverage Reward: {:.3f}'.format(epoch, i, len(train_loader), sum_rewards/count))
 
 
-def evaluate(loader, dae_mse, beam_size, epoch, word_map):
+def evaluate(loader, dae_ar, beam_size, epoch, word_map):
     
     vocab_size = len(word_map)
-    dae_mse.eval()
+    dae_ar.eval()
     results = []
     rev_word_map = {v: k for k, v in word_map.items()}
     
@@ -512,7 +513,7 @@ def evaluate(loader, dae_mse, beam_size, epoch, word_map):
         prev_caplen = prev_caplen.to(device) 
         image_id = image_id.to(device)  # (1,1)
         
-        previous_encoded, final_hidden, prev_caption_mask = dae_mse.dae.caption_encoder(encoded_previous_captions, prev_caplen)
+        previous_encoded, final_hidden, prev_caption_mask = dae_ar.dae.caption_encoder(encoded_previous_captions, prev_caplen)
         
         # Expand all
         previous_encoded = previous_encoded.expand(k, -1, -1)
@@ -534,19 +535,19 @@ def evaluate(loader, dae_mse, beam_size, epoch, word_map):
 
         # Start decoding
         step = 1
-        h1, c1 = dae_mse.dae.init_hidden_state(k)  # (batch_size, decoder_dim)
-        h2, c2 = dae_mse.dae.init_hidden_state(k)
+        h1, c1 = dae_ar.dae.init_hidden_state(k)  # (batch_size, decoder_dim)
+        h2, c2 = dae_ar.dae.init_hidden_state(k)
 
         # s is a number less than or equal to k, because sequences are removed from this process once they hit <end>
         while True:
 
-            embeddings = dae_mse.dae.embed(k_prev_words).squeeze(1)        
+            embeddings = dae_ar.dae.embed(k_prev_words).squeeze(1)        
             topdown_input = torch.cat([embeddings, final_hidden, h2],dim=1)
-            h1,c1 = dae_mse.dae.attention_lstm(topdown_input, (h1, c1))
-            attend_cap = dae_mse.dae.caption_attention(previous_encoded, h1, prev_cap_mask)
+            h1,c1 = dae_ar.dae.attention_lstm(topdown_input, (h1, c1))
+            attend_cap = dae_ar.dae.caption_attention(previous_encoded, h1, prev_cap_mask)
             language_input = torch.cat([h1, attend_cap], dim = 1)
-            h2,c2 = dae_mse.dae.language_lstm(language_input, (h2, c2))
-            scores = dae_mse.dae.fc(h2)  
+            h2,c2 = dae_ar.dae.language_lstm(language_input, (h2, c2))
+            scores = dae_ar.dae.fc(h2)  
             scores = F.log_softmax(scores, dim=1)
 
             # Add
@@ -641,7 +642,7 @@ epochs_since_improvement = 0  # keeps track of number of epochs since there's be
 batch_size = 60
 best_cider = 0.
 print_freq = 100  # print training/validation stats every __ batches
-checkpoint = 'dcnet.tar' # load xe checkpoint
+checkpoint = 'dcnet.tar' # path to checkpoint, None if none
 annFile = 'cococaption/annotations/captions_val2014.json'  # Location of validation annotations
 emb_file = 'glove.6B.300d.txt'
 cached_tokens =  'coco-train-idxs'
@@ -657,12 +658,13 @@ checkpoint = torch.load(checkpoint)
 start_epoch = checkpoint['epoch'] + 1
 epochs_since_improvement = checkpoint['epochs_since_improvement']
 best_cider = checkpoint['cider']
-dae_mse = checkpoint['dae_mse']
-dae_mse_optimizer = checkpoint['dae_mse_optimizer']
+print(best_cider)
+dae_ar = checkpoint['dae_ar']
+dae_ar_optimizer = checkpoint['dae_ar_optimizer']
 
-dae_mse = dae_mse.to(device)
+dae_ar = dae_ar.to(device)
 
-for param in dae_mse.affine_hidden.parameters():
+for param in dae_ar.affine_hidden.parameters():
     param.requires_grad = False
 
 
@@ -684,24 +686,24 @@ val_loader = torch.utils.data.DataLoader(COCOValidationDataset(),
 for epoch in range(start_epoch, epochs):
     
     if epoch == start_epoch:   # only at the starting epoch of self-critical. Then comment out
-        set_learning_rate(dae_mse_optimizer, 5e-5)
+        set_learning_rate(dae_ar_optimizer, 5e-5)
 
     if epochs_since_improvement > 0:
-        adjust_learning_rate(dae_mse_optimizer, 0.5)
+        adjust_learning_rate(dae_ar_optimizer, 0.5)
         
     init_scorer(cached_tokens)
         
     # One epoch's training
     train(train_loader=train_loader,
-          dae_mse=dae_mse,
+          dae_ar=dae_ar,
           criterion = criterion, 
-          dae_mse_optimizer=dae_mse_optimizer,
+          dae_ar_optimizer=dae_ar_optimizer,
           epoch=epoch, 
           word_map = word_map)
 
     # One epoch's validation
     recent_cider, recent_bleu4 = evaluate(loader = val_loader, 
-                                          dae_mse = dae_mse, 
+                                          dae_ar = dae_ar, 
                                           beam_size = 3, 
                                           epoch = epoch, 
                                           word_map = word_map)
@@ -716,5 +718,6 @@ for epoch in range(start_epoch, epochs):
         epochs_since_improvement = 0
 
     # Save checkpoint
-    save_checkpoint(epoch, epochs_since_improvement, dae_mse, dae_mse_optimizer, recent_cider, is_best)
+    save_checkpoint(epoch, epochs_since_improvement, dae_ar, dae_ar_optimizer, recent_cider, is_best)
+
 
