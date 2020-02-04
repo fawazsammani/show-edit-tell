@@ -1,16 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 import pickle
 import json
 from collections import defaultdict
 from six.moves import cPickle
-
-
-# In[ ]:
 
 
 def precook(s, n=4, out=False):
@@ -93,9 +84,6 @@ def pickle_dump(obj, f):
     return cPickle.dump(obj, f, protocol=2)
 
 
-# In[ ]:
-
-
 with open('caption data/WORDMAP_coco.json', 'r') as j:
     word_map = json.load(j)
 
@@ -106,10 +94,3 @@ ngram_words, ngram_idxs, ref_len = build_dict(imgs, word_map)
 
 pickle_dump({'document_frequency': ngram_words, 'ref_len': ref_len}, open('data/coco-train-words.p','wb'))
 pickle_dump({'document_frequency': ngram_idxs, 'ref_len': ref_len}, open('data/coco-train-idxs.p','wb'))
-
-
-# In[ ]:
-
-
-
-
