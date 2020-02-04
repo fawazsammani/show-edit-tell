@@ -60,8 +60,12 @@ python preprocess_existing_caps.py
 ```
 This will dump all the existing caption files to the folder `caption data`.
 
-### Prepare Sequence-Level Training Data
-Run the following command to create the RL-data for sequence-level training:
+### Prepare/Download Sequence-Level Training Data
+Download the RL-data for sequence-level training used for computing metric scores from [here](https://drive.google.com/drive/folders/1T39J7MbcZUmAk-8v7_H6VUzam0k9_3ec). 
+
+Alternitavely, you may prepare the data yourself: 
+
+Run the following command:
 ```bash
 python preprocess_rl.py
 ```
