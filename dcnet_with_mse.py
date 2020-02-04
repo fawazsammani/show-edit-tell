@@ -345,11 +345,10 @@ class DAE(nn.Module):
         return predictions, encoded_captions, decode_lengths, sort_ind, gd_final_hidden, decoder_last_hidden
 
 class DAEWithAR(nn.Module):
-
-    def __init__(self):
         """
         Implements DAE with MSE Optimiztion
         """
+    def __init__(self):
         super(DAEWithAR, self).__init__()
         model = torch.load('BEST_checkpoint_3_dae.pth.tar')
         self.dae = model['dae']
