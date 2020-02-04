@@ -58,8 +58,8 @@ class COCOTestDataset(Dataset):
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 cudnn.benchmark = True 
-dae_checkpoint = 'BEST_checkpoint_0.pth.tar'
-editnet_checkpoint = 'BEST_checkpoint_13.pth.tar'
+dae_checkpoint = 'dcnet.tar'
+editnet_checkpoint = 'editnet.tar'
 annFile = 'cococaption/annotations/captions_val2014.json'
 emb_file = 'glove.6B.300d.txt'
 
