@@ -17,7 +17,7 @@ This contains the source code for *Show, Edit and Tell: A Framework for Editing 
 Argument Parser is currently not supported. We will add support to it soon. 
 
 ### Pretrained Models
-You can download the pretrained models from [here](https://drive.google.com/drive/folders/1qyI8LD8p3qSVFC2hpVYULR8Rjr7hPBL-) and place them in `eval` folder. 
+You can download the pretrained models from [here](https://drive.google.com/drive/folders/1qyI8LD8p3qSVFC2hpVYULR8Rjr7hPBL-). Place them in `eval` folder. 
 
 ### Download and Prepare Features
 In this work, we use 36 fixed [bottom-up features](https://github.com/peteanderson80/bottom-up-attention). If you wish to use the adaptive features (10-100), please refer to `adaptive_features` folder in this repository and follow the instructions. 
