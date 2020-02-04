@@ -3,10 +3,10 @@ After you've placed the `checkpoints` folder here, move the XE checkpoints file 
 
 For XE evaluation,run:
 ```bash
-python eval xe/eval_full.py
+python eval_xe/eval_full.py
 ```
 For rl evaluation, run: 
 ```bash
-python eval rl/eval_full.py
+python eval_rl/eval_full.py
 ```
 
