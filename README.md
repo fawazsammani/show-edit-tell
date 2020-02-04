@@ -58,7 +58,14 @@ Next, run:
 ```bash
 python preprocess_existing_caps.py
 ```
-This will dump all the existing caption files to the folder `caption data`. 
+This will dump all the existing caption files to the folder `caption data`.
+
+### Prepare Sequence-Level Training Data
+Run the following command to create the RL-data for sequence-level training:
+```bash
+python preprocess_rl.py
+```
+This will dump two files in the `data` folder used for computing metric scores.
 
 ### Evaluation
 All the generated captions and scores from our model can be found in the `outputs` folder. 
