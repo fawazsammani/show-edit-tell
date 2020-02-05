@@ -45,7 +45,6 @@ class COCOTrainDataset(Dataset):
         caption: the ground-truth caption of shape (batch_size, max_length)
         caplen: the valid length (without padding) of the ground-truth caption of shape (batch_size,1)
         previous_caption: the encoded caption of the previous model of shape (batch_size, max_length)
-        previous_caption_embed: the ELMo Max Pooled sentence embedding of the caption from the previous model of shape (batch_size, 1024)
         previous_caption_length: the valid length (without padding) of the previous caption of shape (batch_size,1)
         """
         # The Nth caption corresponds to the (N // captions_per_image)th image
