@@ -8,6 +8,7 @@ This contains the source code for *Show, Edit and Tell: A Framework for Editing 
 ### Requirements
 - Python 3.6 or 3.7
 - PyTorch 1.2
+
 For evaluation, you also need:
 - Java 1.8.0 
 - [coco-api](https://github.com/cocodataset/cocoapi) 
