@@ -105,6 +105,6 @@ Refer to `eval` folder for instructions. All the generated captions and scores f
 |Cross-Entropy Loss |  77.9   |  38.0   |  1.200  |  21.2   |
 |CIDEr Optimization |  80.6   |  39.2   |  1.289  |  22.6   |
 
-References
+### References
 Our code is mainly based on [self-critical](https://github.com/ruotianluo/self-critical.pytorch) and [show attend and tell](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Image-Captioning). We thank both authors.
 
