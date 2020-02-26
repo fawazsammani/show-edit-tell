@@ -8,10 +8,11 @@ This contains the source code for *Show, Edit and Tell: A Framework for Editing 
 ### Requirements
 - Python 3.6 or 3.7
 - PyTorch 1.2
-- Java 1.8.0
-- [coco-api](https://github.com/cocodataset/cocoapi) (for evaluation only)
-- [cococaption python 3](https://github.com/mtanti/coco-caption) (for evaluation only)
-- [cider](https://github.com/ruotianluo/cider) (for evaluation only)
+For evaluation, you also need:
+- Java 1.8.0 
+- [coco-api](https://github.com/cocodataset/cocoapi) 
+- [cococaption python 3](https://github.com/mtanti/coco-caption)
+- [cider](https://github.com/ruotianluo/cider) 
 
 
 Argument Parser is currently not supported. We will add support to it soon. 
