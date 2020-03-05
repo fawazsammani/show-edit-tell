@@ -12,7 +12,7 @@ This contains the source code for *Show, Edit and Tell: A Framework for Editing 
 For evaluation, you also need:
 - Java 1.8.0 
 - [coco-api](https://github.com/cocodataset/cocoapi) 
-- [cococaption python 3](https://github.com/mtanti/coco-caption)
+- [cococaption python 3](https://github.com/ruotianluo/coco-caption)
 - [cider](https://github.com/ruotianluo/cider) 
 
 
