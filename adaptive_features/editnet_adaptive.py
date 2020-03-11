@@ -380,6 +380,23 @@ class CaptionAttentionC(nn.Module):
         return gated_context , alpha_c
 
 class SelectC(nn.Module):
+    """
+    SCMA Mechanism
+    The code below includes the mechanism as discussed in the paper. However, implementation-wise, there is a simpler way, which is 
+    filling the unwanted scores with -inf before the softmax operation. By running softmax on all -inf scores except the maximum one,
+    you can get the same output of SCMA. To implement this, pass the scores (before softmax) rather than passing the softamx weights 
+    to the forward function, and perform the following:
+    
+    scores_c = scores.detach()
+    value, max_indices = torch.max(scores_c,1)        # (batch_size)
+    value = value.unsqueeze(1)                # (batch_size,1)
+    mask = torch.zeros_like(scores_c)       # (batch_size, words)
+    mask.scatter_(1, max_indices.unsqueeze(1), 1)
+    scores = scores.masked_fill(mask == 0, -float("inf"))
+    sim_weights = F.softmax(logits, dim = -1)
+    selected_memory = (sim_weights.unsqueeze(2) * previous_encoded_m).sum(dim = 1)
+    
+    """
     
     def __init__(self, prev_caption_dim, decoder_dim):
         super(SelectC, self).__init__()
