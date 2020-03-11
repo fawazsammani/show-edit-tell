@@ -399,7 +399,7 @@ class SelectC(nn.Module):
     mask = torch.zeros_like(scores_c)       # (batch_size, words)
     mask.scatter_(1, max_indices.unsqueeze(1), 1)
     scores = scores.masked_fill(mask == 0, -float("inf"))
-    sim_weights = F.softmax(logits, dim = -1)
+    sim_weights = F.softmax(scores, dim = -1)
     selected_memory = (sim_weights.unsqueeze(2) * previous_encoded_m).sum(dim = 1)
     """
     def __init__(self, prev_caption_dim, decoder_dim):
