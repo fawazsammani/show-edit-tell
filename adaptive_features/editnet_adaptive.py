@@ -395,7 +395,6 @@ class SelectC(nn.Module):
     scores = scores.masked_fill(mask == 0, -float("inf"))
     sim_weights = F.softmax(logits, dim = -1)
     selected_memory = (sim_weights.unsqueeze(2) * previous_encoded_m).sum(dim = 1)
-    
     """
     
     def __init__(self, prev_caption_dim, decoder_dim):
