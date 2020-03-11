@@ -390,8 +390,8 @@ class SelectC(nn.Module):
     SCMA Mechanism
     The code below includes the mechanism as discussed in the paper. However, implementation-wise, there is a simpler way, which is 
     filling the unwanted scores with -inf before the softmax operation. By running softmax on all -inf scores except the maximum one,
-    you can get the same output of SCMA. To implement this, pass the scores (before softmax) rather than passing the softamx weights 
-    to the forward function, and perform the following:
+    you can get the same output. To implement this, pass the scores (before softmax) rather than passing the softamx weights to the 
+    forward function, and perform the following:
     
     scores_c = scores.detach()
     value, max_indices = torch.max(scores_c,1)        # (batch_size)
