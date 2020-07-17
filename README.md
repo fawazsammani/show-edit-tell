@@ -110,11 +110,12 @@ Refer to `eval` folder for instructions. All the generated captions and scores f
 ### Citation
 
 ```
-@inproceedings{showeditell2020,
-  title={Show, Edit and Tell: A Framework for Editing Image Captions},
-  author={Sammani, Fawaz and Melas-Kyriazi, Luke},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  year={2020}
+@InProceedings{Sammani_2020_CVPR,
+author = {Sammani, Fawaz and Melas-Kyriazi, Luke},
+title = {Show, Edit and Tell: A Framework for Editing Image Captions},
+booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+month = {June},
+year = {2020}
 }
 ```
 
